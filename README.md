@@ -42,7 +42,7 @@ Trabalho 5
     └── readme.txt
 ```
 
-O resultado mostra o caminho todo até o texto:
+O resultado mostra a evidência de injeção / a fonte da suspeita:
 
 ```txt
 HIGH  Trabalho 5 > material.zip > slides.pdf > page 7 > annotation
