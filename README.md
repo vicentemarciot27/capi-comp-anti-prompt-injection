@@ -1,4 +1,4 @@
-# Prompt Injection Scanner
+#CAPI - Comp Anti Prompt Injection
 
 Um detector de prompt injection :P
 
@@ -32,7 +32,7 @@ apenas um adapter em `scanner/connectors/`.
    Finding: risco + trecho + caminho até o conteúdo
 ```
 
-Uma atividade vira uma árvore, e cada nó passa pelo mesmo detector:
+Constroi-se a arvore da atividade e todas as folhas passam pelo detector:
 
 ```txt
 Trabalho 5
