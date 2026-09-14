@@ -1,0 +1,25 @@
+[project]
+name = "prompt-injection-scanner"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "google-api-python-client",
+    "google-auth-oauthlib",
+    "httpx",
+    "beautifulsoup4",
+    "lxml",
+    "pymupdf",
+    "cryptography",
+]
+
+[project.optional-dependencies]
+# instalar so quando o formato/etapa entrar de fato
+office = ["python-docx", "python-pptx", "openpyxl"]
+ml = ["transformers", "onnxruntime"]
+ocr = ["pytesseract", "pillow"]
+
+[project.scripts]
+scanner = "scanner.cli:main"
+
+[tool.ruff]
+line-length = 100
