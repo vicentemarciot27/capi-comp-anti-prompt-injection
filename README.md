@@ -42,7 +42,7 @@ Trabalho 5
     └── readme.txt
 ```
 
-O resultado carrega a proveniência completa, não só o rótulo:
+O resultado final é algo assim:
 
 ```txt
 HIGH  Trabalho 5 > material.zip > slides.pdf > page 7 > annotation
@@ -60,9 +60,6 @@ scanner scan-url https://exemplo.com/atividade
 scanner scan-file material.zip
 scanner scan-due          # chamado pelo cron / Cloud Run Job
 ```
-
-Um comando, um processo, termina no fim. Não existe daemon com todos os tokens
-em memória.
 
 ## Deploy
 
