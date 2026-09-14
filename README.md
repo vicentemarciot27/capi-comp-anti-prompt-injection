@@ -77,8 +77,9 @@ Em ordem de preferência:
 
 É a opção mais simples e a melhor para o classificador local: o Prompt Guard
 2 22M fica em disco e carregado em RAM entre execuções, sem cold start e sem
-baixar o modelo a cada run. A VM always-free da Oracle é ARM, então confirme o
-wheel de `onnxruntime` para `aarch64` antes de contar com ela.
+baixar o modelo a cada run. A VM always-free da Oracle é ARM.
+
+Deploy self hosted tem a vantagem de poder rodar um LLM local mais reliably.
 
 ### Cloud Run Job + Cloud Scheduler
 
