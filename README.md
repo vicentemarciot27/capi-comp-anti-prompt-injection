@@ -1,5 +1,7 @@
 # Prompt Injection Scanner
 
+Um detector de prompt injection :P
+
 Procura instruções suspeitas, texto escondido e ofuscação em atividades e
 materiais do Google Classroom, em URLs e em arquivos enviados manualmente.
 
