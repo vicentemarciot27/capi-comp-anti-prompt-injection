@@ -42,7 +42,7 @@ Trabalho 5
     └── readme.txt
 ```
 
-O resultado final é algo assim:
+O resultado mostra o caminho todo até o texto:
 
 ```txt
 HIGH  Trabalho 5 > material.zip > slides.pdf > page 7 > annotation
@@ -63,58 +63,16 @@ scanner scan-due          # chamado pelo cron / Cloud Run Job
 
 ## Deploy
 
-O CLI é um processo que roda e termina, então qualquer máquina com cron serve.
-Em ordem de preferência:
+O CLI roda e termina, então qualquer máquina com cron serve: uma VM própria
+(Oracle always-free, servidor da Rede, ITA Junior), Cloud Run Job com Cloud
+Scheduler, ou cron do GitHub Actions. VM própria mantém o classificador local
+em disco entre execuções, sem cold start. A Oracle always-free roda em ARM:
+confirme antes que o `onnxruntime` tenha wheel para `aarch64`.
 
-### VM própria (Oracle always-free, servidor da Rede, ITA Junior)
+Scan incremental: recurso com mesmo `updateTime`/`md5Checksum` e mesma versão
+de extractor/detector é pulado sem download.
 
-```cron
-*/30 * * * * cd /opt/scanner && ./venv/bin/scanner scan-due >> scan.log 2>&1
-```
-
-É a opção mais simples e a melhor para o classificador local: o Prompt Guard
-2 22M fica em disco e carregado em RAM entre execuções, sem cold start e sem
-baixar o modelo a cada run. A VM always-free da Oracle é ARM.
-
-Deploy self hosted tem a vantagem de poder rodar um LLM local mais reliably.
-
-### Cloud Run Job + Cloud Scheduler
-
-Um Scheduler dispara um endpoint que lê `scan-due` e cria um Job por curso
-vencido. Um Scheduler serve todos os cursos; não é um por curso.
-
-```txt
-Cloud Scheduler (1 job, a cada 30-60 min)
-        │
-        ▼
-    dispatcher  →  scanner scan-due
-        │
-        ├── Cloud Run Job (course A)
-        ├── Cloud Run Job (course B)
-        └── Cloud Run Job (course C)
-```
-
-Vale quando o isolamento por curso e a gestão de segredos compensarem o custo
-de operar. Cloud Scheduler inclui 3 jobs sem custo por billing account, e Cloud
-Run tem franquia mensal de CPU e memória, mas exige billing configurado e não é
-garantia de custo zero.
-
-### GitHub Actions cron
-
-Terceira opção, para não manter máquina nenhuma. Runners padrão são gratuitos
-em repositório público; privado tem franquia de minutos conforme o plano. Com
-dados de Classroom, prefira VM ou Cloud Run.
-
-### Comum a todos
-
-O scan é incremental: recurso com mesmo `updateTime`/`md5Checksum` e mesmas
-versões de extractor e detector é pulado sem download. Subir só
-`DETECTOR_VERSION` reprocessa o texto já extraído, sem baixar o PDF de novo.
-
-Segredos: refresh token cifrado com Fernet no SQLite, chave em variável de
-ambiente. Funciona igual em VM e em Cloud Run. Secret Manager inclui 6 versões
-ativas sem custo por billing account, o que serve para 2 ou 3 usuários; um
-secret por refresh token não escala para centenas de alunos.
+Segredos: refresh token cifrado com Fernet, chave em variável de ambiente.
 
 ## Estado
 
@@ -126,11 +84,12 @@ até `detect.py` existir.
 
 ## Restrições
 
-Persistimos refresh token cifrado, nunca access token. O extractor abre
+O sistema guarda refresh token cifrado, nunca access token. O extractor abre
 arquivos hostis: em produção roda em container separado, sem credencial e sem
 rede.
 
-`drive.readonly` é um scope restricted na Google e exige verificação do app.
+`drive.readonly` exige verificação de app pela Google antes de liberar para
+outros usuários.
 
 ## Fora de escopo
 
