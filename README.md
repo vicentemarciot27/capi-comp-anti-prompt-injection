@@ -1,4 +1,4 @@
-#CAPI - Comp Anti Prompt Injection
+# CAPI - Comp Anti Prompt Injection
 
 Um detector de prompt injection :P
 
